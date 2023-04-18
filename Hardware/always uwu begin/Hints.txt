@@ -1,0 +1,26 @@
+Hint 1
+The first thing to note about this set of files is contained in the equivalent of this design's “main file”, named xga_graphics.v
+
+This file ties together the modules described in the other included files, such that the outputs of one module are the inputs of another. 
+
+At the top, the file reveals that the target hardware is associated with the Terasic brand. A Google search reveals that Terasic specializes in producing hardware that makes interacting with and exploring the capabilities of FPGAs easier. That doesn't tell us which FPGA or board our Verilog design is intended to be used with, but Terasic primarily specializes in boards that utilize Intel FPGAs.
+
+Signals that are in fully upper-case are special signal names that the design software associates with specific pins attached to specific pieces of hardware that the target can interact with. As such, names like 'XGA_GRAPHICS' or the large number of signals that begin with 'VGA' likely indicate that the design interacts with some kind of graphics peripheral, specifically one that uses the VGA connector standard. 
+
+A good line of inquiry from here might be to determine what kind of image the design might be generating. 
+
+It is not impossible that hackery was done to the target's configuration to associate the special signal names with something other than a graphics peripheral to further obfuscate the design. However, I think it is fair to say that level of analysis is outside the scope of this challenge. Further information, namely the files containing the FPGA configuration data the synthesis tool uses when flashing the board, would be necessary to investigate that line of thinking.
+
+Hint 2
+
+The module 'modB', described in the file 'modb.v' contains a description of a read-only-memory block, which is preloaded with some data. Given that the design interacts with a graphics peripheral, it would be fair to assume that memory contains information on how the device will interact with that peripheral. Regardless of if it contains signal configuration information, image data, text, a color look-up table, or any number of other things, it is important to investigate the contents of that memory block.
+
+One way to go about this would be to look at the data from several angles to try finding patterns. Each of the 32 bit segments might represent one contiguous value, such as a string or a large number, or it might represent multiple, unrelated values that exist adjacent to each other in memory. Take a look at the data and see if it appears to be aligned to a particular number of bytes, or if it isn't aligned to anything. You could also try shuffling the information around to see if anything becomes apparent from visual inspection, or perhaps convert the data from base 10 into a more convenient representation.
+
+Another way to investigate that memory block is to look at how it is accessed. The rest of modB's description is focused on that. What signals are used to access the memory, and what circumstances cause those signals to change? What does the memory's output signal look like at any given moment? Is it an entire 4 byte value, 1 byte, 4 bits, or something else? Keeping the possible values of the output signal in mind, what might the output signal actually represent? What signals in other modules are affected by the output signal changing? 
+
+Going into each of the files and standardizing variable names might also help make things clearer. Take the wire name in the top level module, and use that in place of the names for the equivalent signals in the lower level modules. Observe which signals are inputs, and which are outputs. If a single signal is used as an input to multiple modules, it is likely that the output of those modules are related. If the output of one module is used as the input of another, look carefully at the logic in both modules to see if you can find any interesting relationships.
+
+Signals that interact with asynchronous logic are worth paying special attention to. Asynchronous logic is anything that is not driven by the clock. Look for the 'assign' keyword, which is associated with combinational logic, or logic described in an 'always @\*' block. If a signal is controlled by a simple if statement, look at the conditions in which the signal would change from one value to another.
+
+Also, keep in mind that this design was created by a human being. While some aspects of the design are intentionally obfuscated, the overall structure is not. Each signal has a specific purpose, and there are no 'red herrings' that have been included to throw you off. If you think something is wrong with the design, contact an admin, and we can double-check to ensure that you aren't being misled by a typo or some-such.

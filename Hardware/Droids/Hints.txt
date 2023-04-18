@@ -1,0 +1,59 @@
+Hint 1
+
+While this challenge can be solved by taking the boolean logic and throwing it into an online tool, a good way to approach doing it by hand is by considering short-circuit conditions.
+
+Take the statement (A & ~B) | C
+
+The symbols &, ~, and | are bit-wise logical operators, representing AND, NOT, and OR respectively.
+
+We are going to ignore non-binary states, represented by z (high-impedance) and x (unknown), for the purposes of this question.
+
+AND only outputs 1 if both of its inputs are '1'.  
+
+NOT inverts its input. If it receives a 1, it outputs a 0. If it receives a 0, it outputs a 1. 
+
+OR outputs a 1 if either of its inputs are a 1. 
+
+The first thing to note that if C is ever 1, the entire statement resolves to 1; we don't need to consider the first term at all in these cases.
+
+Therefore, we can fill out our truth table like so, without having to analyze the other half of the statement:
+
+A    B    C       O
+0    0    0         
+0    0    1         1
+0    1    0         
+0    1    1         1
+1    0    0
+1    0    1         1
+1    1    0
+1    1    1         1
+
+Cutting our work in half is pretty good, but we can do better. Since the first term is an AND, any time A is 0, or B is 1, the first term resolves to 0. 
+
+Since the first term is only relevant when C is 0, the output of the whole expression is dependent on it in those cases. As such, any time one of our incomplete lines in our truth table has A equal to 0, we can fill in the output as 0. This gives us:
+
+A    B    C       O
+0    0    0         0
+0    0    1         1
+0    1    0         0
+0    1    1         1
+1    0    0
+1    0    1         1
+1    1    0
+1    1    1         1
+
+The same logic can be used with B. In any of our unfilled lines, if B is 1, then the output is 0. This gives us:
+
+A    B    C       O
+0    0    0         0
+0    0    1         1
+0    1    0         0
+0    1    1         1
+1    0    0
+1    0    1         1
+1    1    0         1
+1    1    1         1
+
+This leaves us with a single line where the output of the expression is controlled by more than one input.
+
+While this is a simple example, when you scale up to complex statements with many inputs, this strategy becomes invaluable. Each time you are able to cut down on the number of inputs you need to consider, you reduce your work exponentially. Using a short circuit strategy to solve this challenge may end up being faster than finding a truth table generator, and trying to coax it into doing your work for you.

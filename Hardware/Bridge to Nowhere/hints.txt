@@ -1,0 +1,25 @@
+Hint 1.
+
+This challenge features a Wheatstone Bridge. These circuits are notable for allowing very high accuracy measurements of resistance. Typically, R1 and R3 have resistances that are known to a high precision. R2 would be a potentiometer, a resistor with an adjustable resistance. R4 would be an unknown resistor.
+
+This circuit originally made use of a galvanometer: a current measuring device. The galvanometer would be connected to nodes A and B. R2 would then be adjusted until  the current flowing through the galvanometer is 0. From there it is a simple calculation to find R4s resistance (though deriving the equation requires using Kirchhoffs laws, which is a bit more complicated). You can find more information on the Wikipedia page for this circuit.
+
+This example, though, switches it up a little. 
+
+First: R2 has a set value, which is (probably) unknown to you. It is possible to calculate the value R2 is set to with the information provided. Unfortunately, the potentiometer got stuck, and you aren't able to dial it in to balance the bridge. This complicates the calculation for finding R4.
+
+Second: R3 is (probably) unknown to you. Calculating R3 from the given information is possible.
+
+Third: This bridge circuit uses a voltmeter instead of a galvanometer. A voltmeter measures the voltage between two points (thus the name). To take advantage of this fact, you have been provided two voltage measurements: one from the voltmeter itself that measures between node A and node B, and one that measures the voltage between node A and ground.
+
+Hint 2.
+
+The trick here is to note that the two sides of the bridge are not actually connected. A voltmeter measures the voltage difference between two points; it does not allow any current to flow. No current flow means that the circuit is open between those two points.
+
+Regardless, since the two sides of the bridge are disconnected,  each can be independently treated as a voltage divider. You know the voltage between A and ground (2.6V), and the voltage difference between A and B (1.6V). From those two facts, you can determine that the voltage between B and ground is 1V.
+
+If the voltage between node B and ground is 1V, R3 must be dropping 4V. Since you know the current through R3 is 0.8mA, you can use Ohms Law to find the resistance value of R3.
+
+Once you have R3, you can use the voltage divider equation to find R4. The equation can be is as follows (sourced from Wikipedia)[dividerequation.png](/files/a47ece22a4bdfbf8360141c1b114892d/dividerequation.png)
+
+At this point, you have all the values you need to calculate R4 with that equation.
